@@ -8,7 +8,6 @@
 - Espías
 - Simular retornos de funciones
 - Simular llamadas de funciones
-- Code coverage
 
 <br>
 
@@ -303,7 +302,7 @@ export class UsersComponent implements OnInit {
 
 - En el `describe`
   - Definimos una variable para el componente
-  - Creamos una instancia del servicio MedicosService.
+  - Creamos una instancia del servicio UserService.
   <br>necesita una dependencia (http) le paso null porque no lo vamos a usar
 
 - En el `beforeEach`
@@ -434,7 +433,7 @@ import { EMPTY, of, throwError } from "rxjs";
 
   it('Si addUser falla, en errorMessage tenemos el error del servicio ', () => {
 
-    const error = 'No se pudo agregar el medico';
+    const error = 'No se pudo añadir el usuario';
     const spy = spyOn(service, 'addUser').and.returnValue(
       throwError(error)
     );
@@ -457,7 +456,7 @@ import { EMPTY, of, throwError } from "rxjs";
 ```ts
 ...
 
-  it('deleteUser debe llamar al invocar el método delete del servicio', () => {
+  it('deleteUser debe invocar el método delete del servicio', () => {
 
     spyOn(window, 'confirm').and.returnValue(true);
 
@@ -468,13 +467,3 @@ import { EMPTY, of, throwError } from "rxjs";
   });
 ```
 <br>
-
-## Code coverage
----
-
-``` bash
-$ npm run test -- --code-coverage
-```
-<br>
-
-Crea una carpeta `coverage/prpjectName` que contiene un `index.html`
