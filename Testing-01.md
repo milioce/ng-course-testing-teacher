@@ -155,7 +155,7 @@ describe('Pruebas de Cuenta', () => {
 
 ```ts
 ...
-describe('Pruebas de números', () => {
+describe('Pruebas de Cuenta', () => {
 
  it('El saldo debe ser 150 si ingresamos 50 en una cuenta con 100', () => {
     const cuenta = new Cuenta('Emilio', 100);
@@ -164,11 +164,11 @@ describe('Pruebas de números', () => {
     expect(cuenta.saldo).toBe(150);
   });
 
-    it('El saldo no debe cambiar si retiras más dinero del disponible', () => {
+    it('El saldo debe ser 50 si retiramos 50 en una cuenta con 100', () => {
     const cuenta = new Cuenta('Emilio', 100);
-    cuenta.retirar(150);
+    cuenta.retirar(50);
 
-    expect(cuenta.saldo).toBe(100);
+    expect(cuenta.saldo).toBe(50);
   });
 
 })
@@ -178,16 +178,14 @@ describe('Pruebas de números', () => {
 > Paso 6. Añadimos pruebas con booleanos
 
 ```ts
-import { mensaje, increment, userLogged, getColors } from "./basicos";
+describe('Pruebas de Cuenta', () => {
+  ...
 
-describe('preubas de booleanos', () => {
+  it('Debe tener saldo', () => {
+    const cuenta = new Cuenta('Emilio', 100);
 
-  it('Debe devolver true', () => {
-    const res = userLogged();
-    expect(res).toBeTruthy();
-
-    expect(res).not.toBeFalsy();
-    expect(res).toBe(true);
+    expect(cuenta.haySaldo()).toBe(true);
+    expect(cuenta.haySaldo()).toBeTrue();
   });
 
 });
@@ -224,53 +222,40 @@ import { Cuenta } from "./cuenta";
 
 describe('Pruebas de Cuenta', () => {
 
-  const cuenta = new Cuenta('Emilio', 100);
+  const titular = 'Emilio';
+  const cuenta = new Cuenta(titular, 100);
 
   it('Debe devolver el nombre del banco', () => {
     // const cuenta = new Cuenta('Emilio', 100);
-
     expect(cuenta.banco).toBe('Banco Testing');
   });
 
   it('El nombre de la cuenta debe contener el nombre del titular', () => {
-    const titular = 'Emilio';
-    const cuenta = new Cuenta(titular, 100);
-
     expect(cuenta.nombre()).toContain(titular);
   });
 
   it('El saldo debe ser 150 si ingresamos 50 en una cuenta con 100', () => {
-    // const cuenta = new Cuenta('Emilio', 100);
-    cuenta.ingresar(50); // Deja el saldo cambiado
+    cuenta.ingresar(50);
 
     expect(cuenta.saldo).toBe(150);
   });
 
-  it('El saldo no debe cambiar si retiras más dinero del disponible', () => {
-    // const cuenta = new Cuenta('Emilio', 100);
-    cuenta.retirar(150);
+  it('El saldo debe ser 50 si retiramos 50 en una cuenta con 100', () => {
+    cuenta.ingresar(50); // Coje el saldo cambiado por la anterior prueba
 
-    expect(cuenta.saldo).toBe(100);
+    expect(cuenta.saldo).toBe(150);
   });
 
-  it('haySaldo debe devolver false si retiras todo el saldo', () => {
-    // const cuenta = new Cuenta('Emilio', 100);
-
+  it('Debe tener saldo', () => {
     expect(cuenta.haySaldo()).toBe(true);
-
-    cuenta.retirar(100);
-    expect(cuenta.haySaldo()).toBeFalsy();
+    expect(cuenta.haySaldo()).toBeTrue();
   });
 
   it('Debe tener al menos tres servicios', () => {
-    // const cuenta = new Cuenta('Emilio', 100);
-
     expect(cuenta.servicios.length).toBeGreaterThanOrEqual(3);
   });
 
   it('Deben existir los servicios "tarjeta" y "seguro"', () => {
-    // const cuenta = new Cuenta('Emilio', 100);
-
     expect(cuenta.servicios).toContain('tarjeta');
     expect(cuenta.servicios).toContain('seguro');
   });
@@ -278,7 +263,7 @@ describe('Pruebas de Cuenta', () => {
 });
 ```
 
-**`Fail`**: Fallan las pruebas porque las pruebas dejan el saldo modificado, para la siguiente prueba.
+**`Fail`**: La prueba de ingresar saldo deja el saldo modificado, y la siguiente prueba falla.
 
 - Las pruebas deben estar aisladas
 - Para solucionarlo inicializamos la cuenta antes de ejecutarse cada prueba
@@ -335,17 +320,15 @@ describe('Pruebas de Cuenta', () => {
 El resultado final quedaría como
 
 ``` ts
-import { Cuenta } from "./cuenta";
-
-describe('Pruebas de Cuenta', () => {
-
+  const titular = 'Emilio';
   let cuenta: Cuenta;
 
-   // Ciclo de vida de las pruebas
-   beforeAll(() => {});
+
+  beforeAll(() => {});
 
   beforeEach(() => {
-    cuenta = new Cuenta('Emilio', 100);
+    cuenta = new Cuenta(titular, 100);
+    console.log('beforeEach');
   });
 
   afterEach(() => {});
@@ -357,9 +340,6 @@ describe('Pruebas de Cuenta', () => {
   });
 
   it('El nombre de la cuenta debe contener el nombre del titular', () => {
-    const titular = 'Emilio';
-    const cuenta = new Cuenta(titular, 100);
-
     expect(cuenta.nombre()).toContain(titular);
   });
 
@@ -369,29 +349,27 @@ describe('Pruebas de Cuenta', () => {
     expect(cuenta.saldo).toBe(150);
   });
 
-  it('El saldo no debe cambiar si retiras más dinero del disponible', () => {
-    cuenta.retirar(150);
+  it('El saldo debe ser 50 si retiramos 50 en una cuenta con 100', () => {
+    cuenta.retirar(50);
 
-    expect(cuenta.saldo).toBe(100);
+    expect(cuenta.saldo).toBe(50);
   });
 
-  it('haySaldo debe devolver false si retiras todo el saldo', () => {
+  it('Debe tener saldo', () => {
     expect(cuenta.haySaldo()).toBe(true);
-
-    cuenta.retirar(100);
-    expect(cuenta.haySaldo()).toBeFalsy();
+    expect(cuenta.haySaldo()).toBeTrue();
   });
 
   it('Debe tener al menos tres servicios', () => {
     expect(cuenta.servicios.length).toBeGreaterThanOrEqual(3);
   });
 
-  it('Deben existir los servicios "tarjeta" y "seguro"', () => {
+  it('Debe de existir los servicios tarjeta y seguro', () => {
+    // const cuenta = new Cuenta('Emilio', 100);
+
     expect(cuenta.servicios).toContain('tarjeta');
     expect(cuenta.servicios).toContain('seguro');
   });
-
-});
 ```
 <br>
 
@@ -401,3 +379,40 @@ describe('Pruebas de Cuenta', () => {
 Podemos saltarnos una prueba o una suite completa.
 - `xdescribe()` se salta la suite de prueba
 - `xit()` se salta la prueba
+
+<br>
+
+
+## Code coverage
+---
+
+``` bash
+$ npm run test -- --code-coverage
+```
+<br>
+
+Crea una carpeta `coverage/projectName` que contiene un `index.html`
+
+Si miramos el resultado vemos que nos indica que falta cobertura de pruebas en "Branches", tenemos cubierta 1 de 2.
+
+Si entramos al fichero vemos qué nos falta de probar:
+
+```ts
+ retirar(importe: number) {
+    if (this.saldo >= importe) {
+      this.saldo -= importe;
+    } // Falta el else
+```
+<br>
+
+Falta una prueba para cuando retiramos más importe del saldo disponible
+
+```ts
+...
+
+  it('El saldo no debe cambiar si retiramos más dinero del disponible', () => {
+    cuenta.retirar(150);
+
+    expect(cuenta.saldo).toBe(100);
+  });
+```
